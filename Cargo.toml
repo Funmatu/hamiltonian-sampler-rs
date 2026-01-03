@@ -1,22 +1,23 @@
 [package]
-name = "nx-compute-rs"
+name = "hamiltonian-sampler-rs"
 version = "0.1.0"
 edition = "2021"
 authors = ["R&D Researcher <your.email@example.com>"]
-description = "A dual-runtime computation core for WebAssembly and Python, powered by Rust."
+description = "A dual-runtime computation core,Hamiltonian Monte Carlo (HMC) sampler, for WebAssembly and Python, powered by Rust."
 
 [lib]
-name = "nx_compute_rs"
+name = "hamiltonian_sampler_rs"
 crate-type = ["cdylib"]
 
 [features]
 default = ["wasm"]
-wasm = ["dep:wasm-bindgen"]
+wasm = ["dep:wasm-bindgen", "getrandom/js"]
 python = ["dep:pyo3"]
 
 [dependencies]
 # Common dependencies (Math, etc.)
 serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 
 # Feature: WebAssembly
 wasm-bindgen = { version = "0.2", optional = true }
@@ -24,7 +25,11 @@ wasm-bindgen = { version = "0.2", optional = true }
 # Feature: Python
 pyo3 = { version = "0.20", features = ["extension-module"], optional = true }
 
-rayon = "1.10"
+# 数値計算・乱数
+rand = "0.8"
+rand_distr = "0.4"
+# WASM環境での乱数サポート
+getrandom = { version = "0.2", features = ["js"], optional = true }
 
 [profile.release]
 lto = true

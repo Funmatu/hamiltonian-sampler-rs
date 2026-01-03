@@ -3,28 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>nx-compute-rs Demo</title>
+    <title>Rust HMC Visualizer</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
-        h1 { border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
-        .card { border: 1px solid #ddd; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        button { background-color: #0070f3; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 5px; cursor: pointer; font-size: 1rem; }
-        button:hover { background-color: #005bb5; }
-        button:disabled { background-color: #ccc; cursor: not-allowed; }
-        #output { margin-top: 1rem; padding: 1rem; background: #f5f5f5; border-radius: 5px; font-family: monospace; }
+        body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; max-width: 900px; margin: 0 auto; padding: 20px; }
+        .container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .controls { flex: 1; min-width: 300px; background: #1e293b; padding: 20px; border-radius: 12px; }
+        .canvas-container { flex: 2; min-width: 300px; display: flex; justify-content: center; background: #1e293b; padding: 20px; border-radius: 12px; }
+        canvas { background: #0f172a; border-radius: 8px; border: 1px solid #334155; }
+        h1 { border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        label { display: block; margin-top: 15px; font-size: 0.9em; color: #94a3b8; }
+        input[type="range"] { width: 100%; }
+        select, button { width: 100%; margin-top: 10px; padding: 10px; border-radius: 6px; border: none; }
+        button { background: #6366f1; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #4f46e5; }
+        .stats { margin-top: 20px; padding: 10px; background: #0f172a; border-radius: 6px; font-family: monospace; }
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .val { color: #818cf8; }
     </style>
 </head>
 <body>
-    <h1>nx-compute-rs</h1>
-    <p>R&D Dual-Runtime Architecture Proof of Concept.</p>
-    
-    <div class="card">
-        <h3>WebAssembly Computation</h3>
-        <p>Run the rigorous Rust backend directly in your browser.</p>
-        <button id="run-btn" disabled>Loading WASM...</button>
-        <div id="output">Waiting for input...</div>
-    </div>
+    <h1>Hamiltonian Sampler (Rust/WASM)</h1>
+    <div class="container">
+        <div class="controls">
+            <h3>Parameters</h3>
+            
+            <label>Distribution Type</label>
+            <select id="distType">
+                <option value="bimodal">Bimodal (Double Well)</option>
+                <option value="banana">Banana (Rosenbrock)</option>
+            </select>
 
+            <label>Samples per Batch: <span id="valSamples" class="val">500</span></label>
+            <input type="range" id="nSamples" min="100" max="5000" step="100" value="500">
+
+            <label>Step Size (&epsilon;): <span id="valStepSize" class="val">0.15</span></label>
+            <input type="range" id="stepSize" min="0.01" max="0.5" step="0.01" value="0.15">
+
+            <label>Leapfrog Steps (L): <span id="valSteps" class="val">20</span></label>
+            <input type="range" id="numSteps" min="1" max="100" step="1" value="20">
+
+            <button id="runBtn">Generate Samples</button>
+            <button id="clearBtn" style="background: #475569; margin-top: 10px;">Clear Canvas</button>
+
+            <div class="stats">
+                <div class="stat-row">Total Samples: <span id="totalSamples" class="val">0</span></div>
+                <div class="stat-row">Acceptance Rate: <span id="accRate" class="val">0%</span></div>
+                <div class="stat-row">Compute Time: <span id="compTime" class="val">0 ms</span></div>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="simCanvas" width="500" height="500"></canvas>
+        </div>
+    </div>
     <script type="module" src="./index.js"></script>
 </body>
 </html>
