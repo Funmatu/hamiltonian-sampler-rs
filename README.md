@@ -42,8 +42,8 @@ This repository uses Cargo features to compile the core Rust logic into two dist
 graph TD
     subgraph "Core Logic (Rust)"
         HMC[HmcSystem]
-        Pot[Potential U(q)]
-        Grad[Gradient ∇U(q)]
+        Pot["Potential U(q)"]
+        Grad["Gradient ∇U(q)"]
         LF[Leapfrog Integrator]
     end
 
