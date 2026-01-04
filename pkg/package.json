@@ -1,0 +1,19 @@
+{
+  "name": "hamiltonian-sampler-rs",
+  "type": "module",
+  "collaborators": [
+    "R&D Researcher <your.email@example.com>"
+  ],
+  "description": "A dual-runtime computation core,Hamiltonian Monte Carlo (HMC) sampler, for WebAssembly and Python, powered by Rust.",
+  "version": "0.1.0",
+  "files": [
+    "hamiltonian_sampler_rs_bg.wasm",
+    "hamiltonian_sampler_rs.js",
+    "hamiltonian_sampler_rs.d.ts"
+  ],
+  "main": "hamiltonian_sampler_rs.js",
+  "types": "hamiltonian_sampler_rs.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
